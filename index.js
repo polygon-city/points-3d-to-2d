@@ -1,8 +1,6 @@
 var _ = require("lodash");
 var sylvester = require("sylvester");
 
-module.exports = points3dto2d;
-
 // TODO: Provide a way to go back to 3D
 // - To go back from local coordinates (Lx, Ly) to 3D the transformation is
 // p = locOrigin + Lx*locX + Ly*locY
@@ -58,3 +56,5 @@ var points3dto2d = function(points3d, zUP, parent) {
     }
   };
 };
+
+module.exports = points3dto2d;
