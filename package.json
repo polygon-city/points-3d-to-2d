@@ -1,0 +1,30 @@
+{
+  "name": "points-3d-to-2d",
+  "version": "0.1.0",
+  "description": "Project 3D points onto a 2D plane",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polygon-city/points-3d-to-2d"
+  },
+  "keywords": [
+    "points",
+    "2d",
+    "3d",
+    "plane",
+    "projection"
+  ],
+  "author": "Robin Hawkes <rob@vizicities.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/polygon-city/points-3d-to-2d/issues"
+  },
+  "homepage": "https://github.com/polygon-city/points-3d-to-2d",
+  "dependencies": {
+    "lodash": "^3.9.3",
+    "sylvester": "0.0.21"
+  }
+}
