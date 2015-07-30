@@ -16,28 +16,58 @@ var points3dto2d = function(points3d, zUP, parent) {
   // TODO: Find a good value for this threshold
   // - 0.01 still resulted in collinear issues
   // - 0.05 seems to work well, though unsure if it causes false-positives
+  // - 0.08 covers most of the issues seen with collinear points
   // TODO: Look at exposing this as an option rather than hard-coding it
-  var collinearThreshold = 0.05;
+  var collinearThreshold = 0.1;
+  var nonCollinear;
 
-  // Find first sequence of points that aren't collinear
-  _.each(points3d, function(point, pIndex) {
-    // Exit if no more points are available
-    if (pIndex === points3d.length - 2) {
-      return false;
-    }
-
-    p0 = $V(point);
-    p1 = $V(points3d[pIndex+1]);
-    p2 = $V(points3d[pIndex+2]);
+  // TODO: Try and pick points that will give the best non-collinear result
+  // Otherwise, fall back to looping over all points
+  //
+  // TODO: De-dupe this and the other checks after this
+  if (points3d.length > 5) {
+    var offset = Math.floor(points3d.length / 3);
+    p0 = $V(points3d[0]);
+    p1 = $V(points3d[offset]);
+    p2 = $V(points3d[offset*2]);
 
     // Colinear or near-colinear?
     var cross = p0.subtract(p1).cross(p0.subtract(p2));
 
     // Exit if non-collinear points are found
     if (Math.abs(cross.e(1)) > collinearThreshold || Math.abs(cross.e(2)) > collinearThreshold || Math.abs(cross.e(3)) > collinearThreshold) {
-      return false;
+      nonCollinear = true;
     }
-  });
+  }
+
+  if (!nonCollinear) {
+    var firstPoint;
+
+    // Find first sequence of points that aren't collinear
+    _.each(points3d, function(point, pIndex) {
+      // Exit if no more points are available
+      if (pIndex === points3d.length - 1) {
+        return false;
+      }
+
+      if (pIndex === 0 && !firstPoint) {
+        firstPoint = $V(point);
+        return;
+      }
+
+      p0 = firstPoint;
+      p1 = $V(point);
+      p2 = $V(points3d[pIndex+1]);
+
+      // Colinear or near-colinear?
+      var cross = p0.subtract(p1).cross(p0.subtract(p2));
+
+      // Exit if non-collinear points are found
+      if (Math.abs(cross.e(1)) > collinearThreshold || Math.abs(cross.e(2)) > collinearThreshold || Math.abs(cross.e(3)) > collinearThreshold) {
+        return false;
+      }
+    });
+  }
 
   var locOrigin = (parent.origin) ? parent.origin : p0.dup();
   var locX = (parent.locX) ? parent.locX : p1.subtract(locOrigin);
