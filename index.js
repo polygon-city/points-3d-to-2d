@@ -18,7 +18,7 @@ var points3dto2d = function(points3d, zUP, parent) {
   // - 0.05 seems to work well, though unsure if it causes false-positives
   // - 0.08 covers most of the issues seen with collinear points
   // TODO: Look at exposing this as an option rather than hard-coding it
-  var collinearThreshold = 0.1;
+  var collinearThreshold = 0.05;
   var nonCollinear;
 
   // TODO: Try and pick points that will give the best non-collinear result
